@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { t } from '@/lib/i18n';
 import { toast } from 'sonner';
 import { Heart } from 'lucide-react';
+import { getErrorMessage } from '@/lib/api';
 
 export default function AuthPage() {
   const nav = useNavigate();
@@ -27,7 +28,7 @@ export default function AuthPage() {
       toast.success(mode === 'signin' ? 'Welcome back' : 'Account created');
       nav(u.role === 'victim' ? '/victim' : u.role === 'officer' ? '/officer' : '/counsellor', { replace: true });
     } catch (e) {
-      toast.error(e.response?.data?.detail || 'Something went wrong');
+      toast.error(getErrorMessage(e, mode === 'signin' ? 'Sign in failed' : 'Registration failed'));
     } finally { setLoading(false); }
   };
 
